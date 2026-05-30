@@ -1,0 +1,717 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Website Live</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        }
+
+        .iframe-container {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background: white;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        /* Premium Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 22px;
+            color: white;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(37, 211, 102, 0.25), transparent 28%),
+                radial-gradient(circle at 82% 24%, rgba(99, 102, 241, 0.32), transparent 30%),
+                radial-gradient(circle at 50% 95%, rgba(245, 158, 11, 0.18), transparent 34%),
+                linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+        }
+
+        .loading-overlay::before,
+        .loading-overlay::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 999px;
+            filter: blur(10px);
+            opacity: 0.35;
+            animation: floatGlow 6s ease-in-out infinite;
+        }
+
+        .loading-overlay::before {
+            top: -90px;
+            left: -80px;
+            background: rgba(37, 211, 102, 0.35);
+        }
+
+        .loading-overlay::after {
+            right: -90px;
+            bottom: -100px;
+            background: rgba(99, 102, 241, 0.40);
+            animation-delay: 1.5s;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(28px, -18px) scale(1.08);
+            }
+        }
+
+        .premium-loader-card {
+            position: relative;
+            z-index: 2;
+            width: 94%;
+            max-width: 440px;
+            padding: 28px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.105);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow:
+                0 30px 90px rgba(0, 0, 0, 0.46),
+                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            text-align: center;
+            animation: premiumIn 0.5s ease;
+        }
+
+        @keyframes premiumIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .brand-loader {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 20px;
+            border-radius: 28px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow:
+                0 18px 38px rgba(0,0,0,0.32),
+                0 0 0 8px rgba(255,255,255,0.035);
+        }
+
+        .brand-loader::before {
+            content: "";
+            position: absolute;
+            inset: -4px;
+            border-radius: 32px;
+            background: conic-gradient(from 0deg, #25D366, #60a5fa, #f59e0b, #a855f7, #25D366);
+            z-index: -1;
+            animation: rotateRing 1.7s linear infinite;
+        }
+
+        .brand-loader::after {
+            content: "";
+            position: absolute;
+            inset: 4px;
+            border-radius: 24px;
+            background: rgba(15, 23, 42, 0.92);
+        }
+
+        .brand-loader i {
+            position: relative;
+            z-index: 2;
+            font-size: 34px;
+            color: #ffffff;
+            animation: iconPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes rotateRing {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        .premium-loader-card h2 {
+            font-size: 1.45rem;
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+        }
+
+        .premium-loader-card p {
+            font-size: 0.96rem;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.76);
+            margin-bottom: 20px;
+        }
+
+        .progress-wrap {
+            width: 100%;
+            height: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            margin: 18px 0 22px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 45%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #25D366, #60a5fa, #f59e0b);
+            animation: progressMove 1.45s ease-in-out infinite;
+        }
+
+        @keyframes progressMove {
+            0% {
+                transform: translateX(-110%);
+            }
+            100% {
+                transform: translateX(240%);
+            }
+        }
+
+        .preview-box {
+            width: 100%;
+            padding: 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .preview-top {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .preview-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.35);
+        }
+
+        .skeleton-line,
+        .skeleton-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .skeleton-line::after,
+        .skeleton-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
+            animation: shimmer 1.6s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .skeleton-line {
+            height: 10px;
+            border-radius: 999px;
+            margin-bottom: 9px;
+        }
+
+        .skeleton-line.big {
+            width: 72%;
+            height: 14px;
+        }
+
+        .skeleton-line.small {
+            width: 48%;
+        }
+
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+            margin-top: 12px;
+        }
+
+        .skeleton-card {
+            height: 46px;
+            border-radius: 14px;
+        }
+
+        .refresh-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 13px 28px;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #08111f;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+            transition: all 0.25s ease;
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            background: #f8fafc;
+        }
+
+        .refresh-button:active {
+            transform: scale(0.98);
+        }
+
+        .small-note {
+            margin-top: 13px;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.58);
+        }
+
+        .secure-note {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-size: 0.76rem;
+            color: rgba(255,255,255,0.56);
+            margin-top: 2px;
+        }
+
+        /* Error Overlay */
+        .error-message {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            text-align: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .whatsapp-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .whatsapp-icon-circle {
+            background: #25D366;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 10px 25px -5px rgba(37,211,102,0.4);
+        }
+
+        .whatsapp-icon-circle i {
+            font-size: 48px;
+            color: white;
+        }
+
+        .whatsapp-card h3 {
+            color: #1e293b;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .whatsapp-card p {
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(37,211,102,0.3);
+        }
+
+        .whatsapp-button:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(37,211,102,0.4);
+        }
+
+        .whatsapp-button i {
+            font-size: 1.3rem;
+        }
+
+        .error-footer {
+            margin-top: 30px;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            color: #475569;
+        }
+
+        @media (max-width: 430px) {
+            .premium-loader-card {
+                padding: 24px 18px;
+                border-radius: 26px;
+            }
+
+            .brand-loader {
+                width: 82px;
+                height: 82px;
+                border-radius: 24px;
+            }
+
+            .premium-loader-card h2 {
+                font-size: 1.25rem;
+            }
+
+            .premium-loader-card p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="iframe-container">
+    <iframe id="secureFrame" title="secure viewer" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-top-navigation-by-user-activation"></iframe>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay hide">
+    <div class="premium-loader-card">
+        <div class="brand-loader">
+            <i class="fas fa-store"></i>
+        </div>
+
+        <h2 id="loadingTitle">Preparing Your Live Demo</h2>
+        <p id="loadingText">Please wait while we open your website preview securely.</p>
+
+        <div class="progress-wrap">
+            <div class="progress-bar"></div>
+        </div>
+
+        <div class="preview-box">
+            <div class="preview-top">
+                <span class="preview-dot"></span>
+                <span class="preview-dot"></span>
+                <span class="preview-dot"></span>
+            </div>
+
+            <div class="skeleton-line big"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line small"></div>
+
+            <div class="skeleton-grid">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </div>
+
+        <button id="refreshFrameBtn" class="refresh-button hide" type="button">
+            <i class="fas fa-rotate-right"></i>
+            Refresh Demo
+        </button>
+
+        <div id="smallNote" class="small-note hide">
+            Network slow ho sakta hai. Refresh tap karke demo dobara open karein.
+        </div>
+
+        <div class="secure-note">
+            <i class="fas fa-shield-alt"></i>
+            Secure preview loading
+        </div>
+    </div>
+</div>
+
+<div id="errorOverlay" class="error-message hide">
+    <div class="whatsapp-card">
+        <div class="whatsapp-icon-circle">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+
+        <h3>Oops! Access Denied</h3>
+        <p>This Demo Website Is Not Working.<br>Can You Send Me Again?</p>
+
+        <a href="https://wa.me/917896011657?text=Hello%21%20This%20Demo%20Website%20Is%20Not%20Working.%20Can%20You%20Please%20Send%20Me%20Again%3F"
+           class="whatsapp-button"
+           target="_blank">
+            <i class="fab fa-whatsapp"></i>
+            Chat on WhatsApp
+        </a>
+
+        <div class="error-footer">
+            <i class="fas fa-lock"></i> Contact Administrator
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'S' || e.key === 's')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'P' || e.key === 'p')) { e.preventDefault(); return false; }
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        document.addEventListener('copy', function(e) { e.preventDefault(); return false; });
+        document.addEventListener('cut', function(e) { e.preventDefault(); return false; });
+        document.addEventListener('paste', function(e) { e.preventDefault(); return false; });
+
+        const iframe = document.getElementById('secureFrame');
+        const errorOverlay = document.getElementById('errorOverlay');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const refreshBtn = document.getElementById('refreshFrameBtn');
+        const loadingTitle = document.getElementById('loadingTitle');
+        const loadingText = document.getElementById('loadingText');
+        const smallNote = document.getElementById('smallNote');
+
+        let currentUrl = "";
+        let loadTimer = null;
+        let hasLoaded = false;
+
+        function buildFullUrl(pageName) {
+            let cleanName = pageName.toLowerCase().trim();
+            cleanName = cleanName.replace(/\s+/g, '-');
+            cleanName = cleanName.replace(/[^a-z0-9-]/g, '');
+            return "https://demo-" + cleanName + "-ankur.edgeone.app/";
+        }
+
+        function getPageNameFromHash() {
+            let hash = window.location.hash;
+
+            if (!hash || hash === "#") {
+                return null;
+            }
+
+            let pageName = hash.substring(1);
+
+            if (pageName.includes('&')) {
+                pageName = pageName.split('&')[0];
+            }
+
+            pageName = decodeURIComponent(pageName);
+
+            if (!pageName || pageName.trim() === "") {
+                return null;
+            }
+
+            return pageName;
+        }
+
+        function showLoading() {
+            hasLoaded = false;
+
+            errorOverlay.classList.add('hide');
+            loadingOverlay.classList.remove('hide');
+
+            refreshBtn.classList.add('hide');
+            smallNote.classList.add('hide');
+
+            loadingTitle.textContent = "Preparing Your Live Demo";
+            loadingText.textContent = "Please wait while we open your website preview securely.";
+
+            clearTimeout(loadTimer);
+
+            loadTimer = setTimeout(function() {
+                if (!hasLoaded) {
+                    loadingTitle.textContent = "Demo Is Taking Longer";
+                    loadingText.textContent = "Network slow ho sakta hai ya website open hone me time lag raha hai.";
+                    refreshBtn.classList.remove('hide');
+                    smallNote.classList.remove('hide');
+                }
+            }, 10000);
+        }
+
+        function hideLoading() {
+            hasLoaded = true;
+            clearTimeout(loadTimer);
+
+            loadingOverlay.classList.add('hide');
+            refreshBtn.classList.add('hide');
+            smallNote.classList.add('hide');
+        }
+
+        function showError() {
+            clearTimeout(loadTimer);
+
+            iframe.removeAttribute('src');
+            iframe.srcdoc = "";
+
+            loadingOverlay.classList.add('hide');
+            errorOverlay.classList.remove('hide');
+        }
+
+        function loadWebsite() {
+            const pageName = getPageNameFromHash();
+
+            if (pageName) {
+                currentUrl = buildFullUrl(pageName);
+                showLoading();
+
+                iframe.removeAttribute('srcdoc');
+                iframe.src = currentUrl;
+            } else {
+                currentUrl = "";
+                showError();
+            }
+        }
+
+        function refreshIframe() {
+            if (!currentUrl) return;
+
+            showLoading();
+
+            iframe.src = "about:blank";
+
+            setTimeout(function() {
+                iframe.src = currentUrl + "?reload=" + Date.now();
+            }, 250);
+        }
+
+        iframe.addEventListener('load', function() {
+            if (!currentUrl) return;
+
+            setTimeout(function() {
+                hideLoading();
+            }, 500);
+        });
+
+        refreshBtn.addEventListener('click', function() {
+            refreshIframe();
+        });
+
+        window.addEventListener('hashchange', function() {
+            loadWebsite();
+        });
+
+        loadWebsite();
+    })();
+</script>
+
+</body>
+</html>
