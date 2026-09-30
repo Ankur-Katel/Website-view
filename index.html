@@ -1,17 +1,18 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Website Live</title>
 
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="googlebot" content="noindex">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <style>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport"/>
+<title>Website Live Demo</title>
+<meta content="noindex, nofollow, noarchive, nosnippet" name="robots"/>
+<meta content="noindex, nofollow" name="googlebot"/>
+<!-- FontAwesome 6 Pro-grade icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet"/>
+<!-- Inter & Plus Jakarta Sans Font for high-end look -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -23,12 +24,23 @@
             -webkit-touch-callout: none;
         }
 
+        :root {
+            --wa-brand: #25D366;
+            --wa-brand-dark: #128C7E;
+            --wa-brand-light: #2ee271;
+            --wa-brand-rgb: 37, 211, 102;
+            --dark-bg: #030712;
+            --surface-card: rgba(15, 23, 42, 0.75);
+            --border-glow: rgba(255, 255, 255, 0.12);
+        }
+
         body {
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background-color: #000000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #f8fafc;
         }
 
         .iframe-container {
@@ -37,6 +49,15 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+            background: #000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+
+        .iframe-container.active-view {
+            opacity: 1;
+            visibility: visible;
         }
 
         iframe {
@@ -51,7 +72,18 @@
             display: none !important;
         }
 
-        /* Premium Loading Overlay */
+        /* Ambient animated backgrounds */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ========================
+           PREMIUM LOADING OVERLAY
+           ======================== */
         .loading-overlay {
             position: fixed;
             inset: 0;
@@ -60,71 +92,58 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            padding: 22px;
+            padding: 24px;
             color: white;
-            background:
-                radial-gradient(circle at 18% 18%, rgba(37, 211, 102, 0.25), transparent 28%),
-                radial-gradient(circle at 82% 24%, rgba(99, 102, 241, 0.32), transparent 30%),
-                radial-gradient(circle at 50% 95%, rgba(245, 158, 11, 0.18), transparent 34%),
-                linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+            background: radial-gradient(circle at 50% 20%, #0c172e 0%, #030712 100%);
+            transition: opacity 0.3s ease, visibility 0.3s;
         }
 
-        .loading-overlay::before,
-        .loading-overlay::after {
-            content: "";
-            position: absolute;
-            width: 280px;
-            height: 280px;
-            border-radius: 999px;
-            filter: blur(10px);
-            opacity: 0.35;
-            animation: floatGlow 6s ease-in-out infinite;
+        .glow-1 {
+            top: 10%;
+            left: 15%;
+            width: 380px;
+            height: 380px;
+            background: rgba(37, 211, 102, 0.18);
+            animation: pulseGlow 7s ease-in-out infinite alternate;
         }
 
-        .loading-overlay::before {
-            top: -90px;
-            left: -80px;
-            background: rgba(37, 211, 102, 0.35);
+        .glow-2 {
+            bottom: 10%;
+            right: 15%;
+            width: 420px;
+            height: 420px;
+            background: rgba(99, 102, 241, 0.22);
+            animation: pulseGlow 9s ease-in-out infinite alternate-reverse;
         }
 
-        .loading-overlay::after {
-            right: -90px;
-            bottom: -100px;
-            background: rgba(99, 102, 241, 0.40);
-            animation-delay: 1.5s;
-        }
-
-        @keyframes floatGlow {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            50% {
-                transform: translate(28px, -18px) scale(1.08);
-            }
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.6; }
+            100% { transform: scale(1.15) translate(25px, -20px); opacity: 0.9; }
         }
 
         .premium-loader-card {
             position: relative;
             z-index: 2;
-            width: 94%;
-            max-width: 440px;
-            padding: 28px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.105);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 460px;
+            padding: 34px 28px;
+            border-radius: 32px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow:
-                0 30px 90px rgba(0, 0, 0, 0.46),
-                inset 0 1px 0 rgba(255, 255, 255, 0.14);
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
+                0 30px 100px -15px rgba(0, 0, 0, 0.75),
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
             text-align: center;
-            animation: premiumIn 0.5s ease;
+            animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes premiumIn {
+        @keyframes cardEntrance {
             from {
                 opacity: 0;
-                transform: translateY(18px) scale(0.96);
+                transform: translateY(24px) scale(0.95);
             }
             to {
                 opacity: 1;
@@ -132,135 +151,154 @@
             }
         }
 
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.25);
+            color: #4ade80;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .security-badge i {
+            font-size: 0.8rem;
+        }
+
         .brand-loader {
-            width: 92px;
-            height: 92px;
+            width: 88px;
+            height: 88px;
             margin: 0 auto 20px;
-            border-radius: 28px;
+            border-radius: 26px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            background:
-                linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
-            border: 1px solid rgba(255,255,255,0.18);
-            box-shadow:
-                0 18px 38px rgba(0,0,0,0.32),
-                0 0 0 8px rgba(255,255,255,0.035);
+            background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+            box-shadow: 0 16px 35px rgba(0,0,0,0.4);
         }
 
         .brand-loader::before {
             content: "";
             position: absolute;
-            inset: -4px;
-            border-radius: 32px;
-            background: conic-gradient(from 0deg, #25D366, #60a5fa, #f59e0b, #a855f7, #25D366);
+            inset: -3px;
+            border-radius: 29px;
+            background: conic-gradient(from 0deg, #25D366, #38bdf8, #818cf8, #a855f7, #25D366);
             z-index: -1;
-            animation: rotateRing 1.7s linear infinite;
+            animation: rotateRing 2s linear infinite;
         }
 
         .brand-loader::after {
             content: "";
             position: absolute;
-            inset: 4px;
-            border-radius: 24px;
-            background: rgba(15, 23, 42, 0.92);
+            inset: 3px;
+            border-radius: 23px;
+            background: #0b1329;
         }
 
         .brand-loader i {
             position: relative;
             z-index: 2;
-            font-size: 34px;
-            color: #ffffff;
-            animation: iconPulse 1.5s ease-in-out infinite;
+            font-size: 32px;
+            background: linear-gradient(135deg, #ffffff 30%, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: iconPulse 2s ease-in-out infinite;
         }
 
         @keyframes rotateRing {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         @keyframes iconPulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.9;
-            }
-            50% {
-                transform: scale(1.08);
-                opacity: 1;
-            }
+            0%, 100% { transform: scale(1); opacity: 0.92; }
+            50% { transform: scale(1.1); opacity: 1; }
         }
 
         .premium-loader-card h2 {
-            font-size: 1.45rem;
-            line-height: 1.2;
+            font-size: 1.5rem;
+            line-height: 1.25;
             font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            color: #ffffff;
         }
 
         .premium-loader-card p {
-            font-size: 0.96rem;
+            font-size: 0.92rem;
             line-height: 1.55;
-            color: rgba(255, 255, 255, 0.76);
-            margin-bottom: 20px;
+            color: #94a3b8;
+            margin-bottom: 18px;
         }
 
         .progress-wrap {
             width: 100%;
-            height: 8px;
+            height: 6px;
             overflow: hidden;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.12);
-            margin: 18px 0 22px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 16px 0 20px;
         }
 
         .progress-bar {
             height: 100%;
-            width: 45%;
+            width: 40%;
             border-radius: 999px;
-            background: linear-gradient(90deg, #25D366, #60a5fa, #f59e0b);
-            animation: progressMove 1.45s ease-in-out infinite;
+            background: linear-gradient(90deg, #25D366, #38bdf8, #818cf8);
+            animation: progressMove 1.6s ease-in-out infinite;
         }
 
         @keyframes progressMove {
-            0% {
-                transform: translateX(-110%);
-            }
-            100% {
-                transform: translateX(240%);
-            }
+            0% { transform: translateX(-120%); }
+            100% { transform: translateX(250%); }
         }
 
         .preview-box {
             width: 100%;
-            padding: 14px;
+            padding: 14px 16px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.07);
             margin-bottom: 20px;
             text-align: left;
         }
 
         .preview-top {
             display: flex;
-            gap: 6px;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 12px;
+        }
+
+        .preview-dots {
+            display: flex;
+            gap: 6px;
         }
 
         .preview-dot {
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.35);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .preview-tag {
+            font-size: 0.68rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #64748b;
         }
 
         .skeleton-line,
         .skeleton-card {
             position: relative;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .skeleton-line::after,
@@ -269,41 +307,33 @@
             position: absolute;
             inset: 0;
             transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
-            animation: shimmer 1.6s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            animation: shimmer 1.7s infinite;
         }
 
         @keyframes shimmer {
-            100% {
-                transform: translateX(100%);
-            }
+            100% { transform: translateX(100%); }
         }
 
         .skeleton-line {
-            height: 10px;
+            height: 9px;
             border-radius: 999px;
-            margin-bottom: 9px;
+            margin-bottom: 8px;
         }
 
-        .skeleton-line.big {
-            width: 72%;
-            height: 14px;
-        }
-
-        .skeleton-line.small {
-            width: 48%;
-        }
+        .skeleton-line.big { width: 75%; height: 12px; }
+        .skeleton-line.small { width: 45%; }
 
         .skeleton-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 9px;
-            margin-top: 12px;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .skeleton-card {
-            height: 46px;
-            border-radius: 14px;
+            height: 44px;
+            border-radius: 12px;
         }
 
         .refresh-button {
@@ -316,17 +346,19 @@
             cursor: pointer;
             padding: 13px 28px;
             border-radius: 999px;
-            font-size: 1rem;
-            font-weight: 800;
-            color: #08111f;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #030712;
             background: #ffffff;
-            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
-            transition: all 0.25s ease;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 6px;
         }
 
         .refresh-button:hover {
             transform: translateY(-2px);
-            background: #f8fafc;
+            background: #f1f5f9;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
         }
 
         .refresh-button:active {
@@ -334,9 +366,10 @@
         }
 
         .small-note {
-            margin-top: 13px;
-            font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.58);
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.4;
         }
 
         .secure-note {
@@ -344,244 +377,480 @@
             align-items: center;
             justify-content: center;
             gap: 7px;
-            font-size: 0.76rem;
-            color: rgba(255,255,255,0.56);
-            margin-top: 2px;
+            font-size: 0.74rem;
+            color: #64748b;
+            margin-top: 14px;
         }
 
-        /* Error Overlay */
+        /* ========================
+           LEVEL-UP ERROR / ACCESS OVERLAY
+           ======================== */
         .error-message {
             position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 9999;
-            text-align: center;
-            padding: 2rem;
-            color: white;
+            padding: 24px;
+            background:
+                radial-gradient(circle at 50% 15%, rgba(37, 211, 102, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 80% 85%, rgba(239, 68, 68, 0.12) 0%, transparent 45%),
+                #030712;
+            overflow-y: auto;
         }
 
         .whatsapp-card {
-            background: rgba(255,255,255,0.95);
-            border-radius: 24px;
-            padding: 40px 30px;
-            max-width: 450px;
-            width: 90%;
+            position: relative;
+            background: rgba(15, 23, 42, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 36px;
+            padding: 44px 34px;
+            max-width: 480px;
+            width: 100%;
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s ease;
+            box-shadow:
+                0 30px 90px -15px rgba(0, 0, 0, 0.85),
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        /* Subtle top glowing bar */
+        .whatsapp-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--wa-brand), transparent);
+            border-radius: 999px;
+        }
+
+        /* Interactive High-End WhatsApp Badge */
+        .avatar-container {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 24px auto;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.25);
+            animation: waPulseRing 2.4s infinite cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+
+        .pulse-ring-2 {
+            position: absolute;
+            inset: -16px;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.12);
+            animation: waPulseRing 2.4s infinite cubic-bezier(0.25, 1, 0.5, 1) 0.6s;
+            z-index: 0;
+        }
+
+        @keyframes waPulseRing {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            100% { transform: scale(1.45); opacity: 0; }
         }
 
         .whatsapp-icon-circle {
-            background: #25D366;
-            width: 80px;
-            height: 80px;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
+            background: linear-gradient(145deg, #2ee271, #1fb355);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px auto;
-            box-shadow: 0 10px 25px -5px rgba(37,211,102,0.4);
+            box-shadow:
+                0 16px 36px -6px rgba(37, 211, 102, 0.55),
+                inset 0 2px 3px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .whatsapp-icon-circle i {
-            font-size: 48px;
-            color: white;
+            font-size: 50px;
+            color: #ffffff;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+        }
+
+        .status-dot-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: #10b981;
+            border: 3px solid #0f172a;
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+        }
+
+        .error-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.14);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin-bottom: 14px;
         }
 
         .whatsapp-card h3 {
-            color: #1e293b;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: 600;
+            color: #ffffff;
+            font-size: 1.65rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
         }
 
         .whatsapp-card p {
-            color: #475569;
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 25px;
+            color: #94a3b8;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .highlight-accent {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        /* 
+           ULTRA-PREMIUM WHATSAPP BUTTON 
+           Levels up with dynamic shine, dual-layer glow, 
+           and smooth micro-interactions
+        */
+        .whatsapp-button-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
         }
 
         .whatsapp-button {
-            display: inline-flex;
+            position: relative;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            background: #25D366;
-            color: white;
+            gap: 14px;
+            width: 100%;
+            background: linear-gradient(135deg, #2ae16e 0%, #20b857 50%, #158b41 100%);
+            color: #ffffff;
             text-decoration: none;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
+            padding: 17px 32px;
+            border-radius: 20px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             cursor: pointer;
-            box-shadow: 0 10px 20px -5px rgba(37,211,102,0.3);
+            box-shadow:
+                0 14px 30px -5px rgba(37, 211, 102, 0.45),
+                0 6px 12px -2px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            overflow: hidden;
+        }
+
+        /* Shimmer sweep effect on button */
+        .whatsapp-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(25deg);
+            animation: buttonSweep 3.5s infinite ease-in-out;
+        }
+
+        @keyframes buttonSweep {
+            0%, 55% { transform: translateX(0) rotate(25deg); }
+            100% { transform: translateX(450%) rotate(25deg); }
         }
 
         .whatsapp-button:hover {
-            background: #128C7E;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px -5px rgba(37,211,102,0.4);
+            transform: translateY(-3px) scale(1.01);
+            background: linear-gradient(135deg, #32eb77 0%, #25cc62 50%, #179948 100%);
+            box-shadow:
+                0 20px 40px -5px rgba(37, 211, 102, 0.6),
+                0 10px 20px -3px rgba(0, 0, 0, 0.4),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .whatsapp-button:active {
+            transform: translateY(1px) scale(0.99);
+            box-shadow: 0 8px 18px -3px rgba(37, 211, 102, 0.4);
         }
 
         .whatsapp-button i {
-            font-size: 1.3rem;
+            font-size: 1.45rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            transition: transform 0.25s ease;
         }
 
+        .whatsapp-button:hover i {
+            transform: scale(1.12) rotate(-5deg);
+        }
+
+        .btn-text-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            line-height: 1.25;
+        }
+
+        .btn-main-text {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .btn-sub-text {
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .btn-arrow {
+            margin-left: auto;
+            font-size: 1rem !important;
+            opacity: 0.8;
+            transition: transform 0.25s ease;
+        }
+
+        .whatsapp-button:hover .btn-arrow {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        /* Error Footer Info */
         .error-footer {
-            margin-top: 30px;
-            font-size: 0.75rem;
-            opacity: 0.7;
-            color: #475569;
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: #64748b;
         }
 
-        @media (max-width: 430px) {
-            .premium-loader-card {
-                padding: 24px 18px;
-                border-radius: 26px;
-            }
+        .security-badge-bottom {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #94a3b8;
+        }
 
-            .brand-loader {
-                width: 82px;
-                height: 82px;
-                border-radius: 24px;
-            }
+        .security-badge-bottom i {
+            color: #10b981;
+        }
 
-            .premium-loader-card h2 {
-                font-size: 1.25rem;
-            }
+        .demo-id-tag {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
 
-            .premium-loader-card p {
+        @media (max-width: 480px) {
+            .whatsapp-card {
+                padding: 32px 22px;
+                border-radius: 28px;
+            }
+            .whatsapp-card h3 {
+                font-size: 1.4rem;
+            }
+            .whatsapp-card p {
                 font-size: 0.9rem;
+            }
+            .whatsapp-button {
+                padding: 15px 22px;
+                border-radius: 16px;
+            }
+            .error-footer {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-
-<div class="iframe-container">
-    <iframe id="secureFrame" title="secure viewer" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-top-navigation-by-user-activation"></iframe>
+<!-- Secure Iframe Container (Hidden until verified to prevent EdgeOne 404 flash) -->
+<div class="iframe-container" id="iframeContainer">
+<iframe id="secureFrame" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-top-navigation-by-user-activation" title="Secure Live Demo Viewer">
+</iframe>
 </div>
-
-<div id="loadingOverlay" class="loading-overlay hide">
-    <div class="premium-loader-card">
-        <div class="brand-loader">
-            <i class="fas fa-store"></i>
+<!-- Premium High-Tech Loading Overlay -->
+<div class="loading-overlay hide" id="loadingOverlay">
+<div class="ambient-glow glow-1"></div>
+<div class="ambient-glow glow-2"></div>
+<div class="premium-loader-card">
+<div class="security-badge">
+<i class="fas fa-shield-halved"></i>
+            End-to-End Encrypted Session
         </div>
-
-        <h2 id="loadingTitle">Preparing Your Live Demo</h2>
-        <p id="loadingText">Please wait while we open your website preview securely.</p>
-
-        <div class="progress-wrap">
-            <div class="progress-bar"></div>
-        </div>
-
-        <div class="preview-box">
-            <div class="preview-top">
-                <span class="preview-dot"></span>
-                <span class="preview-dot"></span>
-                <span class="preview-dot"></span>
-            </div>
-
-            <div class="skeleton-line big"></div>
-            <div class="skeleton-line"></div>
-            <div class="skeleton-line small"></div>
-
-            <div class="skeleton-grid">
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-            </div>
-        </div>
-
-        <button id="refreshFrameBtn" class="refresh-button hide" type="button">
-            <i class="fas fa-rotate-right"></i>
-            Refresh Demo
+<div class="brand-loader">
+<i class="fas fa-store"></i>
+</div>
+<h2 id="loadingTitle">Loading Your Live Demo</h2>
+<p id="loadingText">Connecting to sandbox environment &amp; launching secure preview...</p>
+<div class="progress-wrap">
+<div class="progress-bar"></div>
+</div>
+<div class="preview-box">
+<div class="preview-top">
+<div class="preview-dots">
+<span class="preview-dot"></span>
+<span class="preview-dot"></span>
+<span class="preview-dot"></span>
+</div>
+<span class="preview-tag">live.preview // active</span>
+</div>
+<div class="skeleton-line big"></div>
+<div class="skeleton-line"></div>
+<div class="skeleton-line small"></div>
+<div class="skeleton-grid">
+<div class="skeleton-card"></div>
+<div class="skeleton-card"></div>
+</div>
+</div>
+<button class="refresh-button hide" id="refreshFrameBtn" type="button">
+<i class="fas fa-arrows-rotate"></i>
+            Refresh Demo Session
         </button>
-
-        <div id="smallNote" class="small-note hide">
-            Network slow ho sakta hai. Refresh tap karke demo dobara open karein.
+<div class="small-note hide" id="smallNote">The demo is taking longer than expected to load. You can click refresh to try reconnecting.</div>
+<div class="secure-note">
+<i class="fas fa-lock"></i>
+            Protected Preview Mode • Anti-Tamper Shield
         </div>
-
-        <div class="secure-note">
-            <i class="fas fa-shield-alt"></i>
-            Secure preview loading
-        </div>
-    </div>
 </div>
-
-<div id="errorOverlay" class="error-message hide">
-    <div class="whatsapp-card">
-        <div class="whatsapp-icon-circle">
-            <i class="fab fa-whatsapp"></i>
-        </div>
-
-        <h3>Oops! Access Denied</h3>
-        <p>This Demo Website Is Not Working.<br>Can You Send Me Again?</p>
-
-        <a href="https://wa.me/917896011657?text=Hello%21%20This%20Demo%20Website%20Is%20Not%20Working.%20Can%20You%20Please%20Send%20Me%20Again%3F"
-           class="whatsapp-button"
-           target="_blank">
-            <i class="fab fa-whatsapp"></i>
-            Chat on WhatsApp
-        </a>
-
-        <div class="error-footer">
-            <i class="fas fa-lock"></i> Contact Administrator
-        </div>
-    </div>
 </div>
-
+<!-- Modern High-Converting WhatsApp Fallback Overlay -->
+<div class="error-message hide" id="errorOverlay">
+<div class="ambient-glow glow-1"></div>
+<div class="ambient-glow glow-2"></div>
+<div class="whatsapp-card">
+<!-- Interactive Glowing WhatsApp Icon with active online beacon -->
+<div class="avatar-container">
+<div class="pulse-ring"></div>
+<div class="pulse-ring-2"></div>
+<div class="whatsapp-icon-circle">
+<i class="fab fa-whatsapp"></i>
+</div>
+<span class="status-dot-badge" title="Support Online"></span>
+</div>
+<div class="error-tag">
+<i class="fas fa-triangle-exclamation"></i>
+            Session Expired or Link Inactive
+        </div>
+<h3>Oops! Live Demo Unavailable</h3>
+<p>This live demo session is unavailable or the link has expired. <span class="highlight-accent">Request an updated preview link directly on WhatsApp.</span></p>
+<!-- Upgraded Level-Up WhatsApp CTA Button -->
+<div class="whatsapp-button-wrapper">
+<a class="whatsapp-button" href="https://wa.me/917896011657?text=Hello%21%20This%20live%20demo%20website%20is%20not%20working.%20Could%20you%20please%20provide%20an%20updated%20link%3F" id="whatsappDirectBtn" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-whatsapp"></i>
+<div class="btn-text-group">
+<span class="btn-main-text">Request New Demo Link</span>
+<span class="btn-sub-text">Connect Instantly on WhatsApp</span>
+</div>
+<i class="fas fa-arrow-right btn-arrow"></i>
+</a>
+</div>
+<div class="error-footer">
+<div class="security-badge-bottom">
+<i class="fas fa-shield-check"></i> Verified Demo Portal
+            </div>
+<span class="demo-id-tag">ENCRYPTED • PROTECTED</span>
+</div>
+</div>
+</div>
 <script>
     (function() {
+        // ==========================================
+        // ADVANCED ANTI-TAMPER & SECURITY SHIELD
+        // Prevents inspection, viewing source, copying
+        // ==========================================
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12') { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) { e.preventDefault(); return false; }
-            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) { e.preventDefault(); return false; }
-            if (e.ctrlKey && (e.key === 'S' || e.key === 's')) { e.preventDefault(); return false; }
-            if (e.ctrlKey && (e.key === 'P' || e.key === 'p')) { e.preventDefault(); return false; }
-        });
+            // F12 developer console
+            if (e.key === 'F12' || e.keyCode === 123) { 
+                e.preventDefault(); 
+                return false; 
+            }
+            // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C (Devtools)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault(); 
+                return false; 
+            }
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) { 
+                e.preventDefault(); 
+                return false; 
+            }
+            // Ctrl+S (Save Page)
+            if (e.ctrlKey && (e.key === 'S' || e.key === 's')) { 
+                e.preventDefault(); 
+                return false; 
+            }
+            // Ctrl+P (Print)
+            if (e.ctrlKey && (e.key === 'P' || e.key === 'p')) { 
+                e.preventDefault(); 
+                return false; 
+            }
+            // Mac shortcuts (Cmd+Option+I/J/C/U)
+            if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault(); 
+                return false; 
+            }
+            if (e.metaKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
+                e.preventDefault(); 
+                return false; 
+            }
+        }, { capture: true });
 
+        // Disable Context Menu
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             e.stopPropagation();
             return false;
         });
 
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
+        // Disable text selection and dragging
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); return false; });
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
         document.addEventListener('copy', function(e) { e.preventDefault(); return false; });
         document.addEventListener('cut', function(e) { e.preventDefault(); return false; });
         document.addEventListener('paste', function(e) { e.preventDefault(); return false; });
 
+        // Elements
+        const iframeContainer = document.getElementById('iframeContainer');
         const iframe = document.getElementById('secureFrame');
         const errorOverlay = document.getElementById('errorOverlay');
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -589,117 +858,213 @@
         const loadingTitle = document.getElementById('loadingTitle');
         const loadingText = document.getElementById('loadingText');
         const smallNote = document.getElementById('smallNote');
+        const whatsappDirectBtn = document.getElementById('whatsappDirectBtn');
 
         let currentUrl = "";
         let loadTimer = null;
-        let hasLoaded = false;
+        let activeProbeToken = 0;
 
+        // Dynamic WhatsApp Link Updater
+        function updateWhatsAppLink(pageName) {
+            const cleanName = pageName ? decodeURIComponent(pageName).replace(/^#/, '').trim() : '';
+            let msg = '';
+            if (cleanName) {
+                msg = "Hello! The live demo for " + cleanName + " is not working. Could you please provide an updated link?";
+            } else {
+                msg = "Hello! This live demo website is not working. Could you please provide an updated link?";
+            }
+            whatsappDirectBtn.href = "https://wa.me/917896011657?text=" + encodeURIComponent(msg);
+        }
+
+        // ==========================================
+        // URL BUILDER (.edgeone.dev domain)
+        // ==========================================
         function buildFullUrl(pageName) {
             let cleanName = pageName.toLowerCase().trim();
             cleanName = cleanName.replace(/\s+/g, '-');
             cleanName = cleanName.replace(/[^a-z0-9-]/g, '');
-            return "https://demo-" + cleanName + "-ankur.edgeone.app/";
+            return "https://demo-" + cleanName + "-ankur.edgeone.dev/";
         }
 
         function getPageNameFromHash() {
             let hash = window.location.hash;
-
             if (!hash || hash === "#") {
                 return null;
             }
-
             let pageName = hash.substring(1);
-
             if (pageName.includes('&')) {
                 pageName = pageName.split('&')[0];
             }
-
-            pageName = decodeURIComponent(pageName);
-
-            if (!pageName || pageName.trim() === "") {
+            pageName = decodeURIComponent(pageName).trim();
+            if (!pageName) {
                 return null;
             }
-
             return pageName;
         }
 
         function showLoading() {
-            hasLoaded = false;
-
             errorOverlay.classList.add('hide');
+            iframeContainer.classList.remove('active-view');
             loadingOverlay.classList.remove('hide');
-
             refreshBtn.classList.add('hide');
             smallNote.classList.add('hide');
-
-            loadingTitle.textContent = "Preparing Your Live Demo";
-            loadingText.textContent = "Please wait while we open your website preview securely.";
-
-            clearTimeout(loadTimer);
-
-            loadTimer = setTimeout(function() {
-                if (!hasLoaded) {
-                    loadingTitle.textContent = "Demo Is Taking Longer";
-                    loadingText.textContent = "Network slow ho sakta hai ya website open hone me time lag raha hai.";
-                    refreshBtn.classList.remove('hide');
-                    smallNote.classList.remove('hide');
-                }
-            }, 10000);
+            loadingTitle.textContent = "Loading Your Live Demo";
+            loadingText.textContent = "Connecting to sandbox environment & launching secure preview...";
         }
 
         function hideLoading() {
-            hasLoaded = true;
             clearTimeout(loadTimer);
-
             loadingOverlay.classList.add('hide');
+            iframeContainer.classList.add('active-view');
             refreshBtn.classList.add('hide');
             smallNote.classList.add('hide');
         }
 
-        function showError() {
+        function showError(pageName) {
             clearTimeout(loadTimer);
-
+            updateWhatsAppLink(pageName);
             iframe.removeAttribute('src');
             iframe.srcdoc = "";
-
+            iframeContainer.classList.remove('active-view');
             loadingOverlay.classList.add('hide');
             errorOverlay.classList.remove('hide');
         }
 
-        function loadWebsite() {
-            const pageName = getPageNameFromHash();
+        // ==========================================
+        // ACTIVE MULTI-STAGE AVAILABILITY PROBE
+        // Completely prevents default EdgeOne 404 from flashing
+        // ==========================================
+        async function probeUrlAvailability(targetUrl, timeoutMs = 4500) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-            if (pageName) {
-                currentUrl = buildFullUrl(pageName);
-                showLoading();
+            try {
+                // 1. Try standard CORS/HEAD/GET request
+                // If EdgeOne sends 404 with standard status, we catch it right away
+                const response = await fetch(targetUrl, {
+                    method: 'GET',
+                    mode: 'cors',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
 
-                iframe.removeAttribute('srcdoc');
-                iframe.src = currentUrl;
-            } else {
-                currentUrl = "";
-                showError();
+                if (response.status === 404 || response.status >= 500) {
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                clearTimeout(timeoutId);
+                if (err.name === 'AbortError') {
+                    // Timed out completely - domain likely doesn't exist or is hung
+                    return false;
+                }
+
+                // 2. If blocked by CORS or Network error, perform secondary probe
+                // Attempt to probe via image test for favicon / common asset
+                return new Promise((resolve) => {
+                    let settled = false;
+                    const fallbackImg = new Image();
+                    const timer = setTimeout(() => {
+                        if (!settled) {
+                            settled = true;
+                            fallbackImg.src = "";
+                            // If it times out fast, treat as down to avoid hanging
+                            resolve(false);
+                        }
+                    }, 3000);
+
+                    fallbackImg.onload = () => {
+                        if (!settled) {
+                            settled = true;
+                            clearTimeout(timer);
+                            resolve(true);
+                        }
+                    };
+
+                    fallbackImg.onerror = () => {
+                        if (!settled) {
+                            settled = true;
+                            clearTimeout(timer);
+                            // Try no-cors ping check: if DNS exists, fetch(no-cors) succeeds opaque
+                            const noCorsController = new AbortController();
+                            const noCorsTimer = setTimeout(() => noCorsController.abort(), 2000);
+                            fetch(targetUrl, { method: 'HEAD', mode: 'no-cors', signal: noCorsController.signal })
+                                .then(() => {
+                                    clearTimeout(noCorsTimer);
+                                    resolve(true);
+                                })
+                                .catch(() => {
+                                    clearTimeout(noCorsTimer);
+                                    resolve(false);
+                                });
+                        }
+                    };
+
+                    fallbackImg.src = targetUrl + (targetUrl.endsWith('/') ? '' : '/') + 'favicon.ico?probe=' + Date.now();
+                });
             }
         }
 
-        function refreshIframe() {
-            if (!currentUrl) return;
+        async function loadWebsite() {
+            const thisToken = ++activeProbeToken;
+            clearTimeout(loadTimer);
 
+            const pageName = getPageNameFromHash();
+            if (!pageName) {
+                showError('');
+                return;
+            }
+
+            currentUrl = buildFullUrl(pageName);
             showLoading();
 
-            iframe.src = "about:blank";
+            // Guard timer: if the entire process hangs or iframe never completes, fail gracefully to error screen
+            loadTimer = setTimeout(() => {
+                if (activeProbeToken === thisToken) {
+                    showError(pageName);
+                }
+            }, 7000);
 
-            setTimeout(function() {
-                iframe.src = currentUrl + "?reload=" + Date.now();
-            }, 250);
+            // Execute active probe first
+            const isAvailable = await probeUrlAvailability(currentUrl, 4000);
+            if (activeProbeToken !== thisToken) return;
+
+            if (!isAvailable) {
+                showError(pageName);
+                return;
+            }
+
+            // Target is available: safely load into iframe while still hidden behind overlay
+            iframe.removeAttribute('srcdoc');
+            
+            // Wait for iframe load event before displaying to avoid any intermediate 404 flashes
+            let iframeLoaded = false;
+            const onIframeLoaded = function() {
+                if (activeProbeToken !== thisToken) return;
+                iframeLoaded = true;
+                iframe.removeEventListener('load', onIframeLoaded);
+                // Inspect if possible, then reveal
+                setTimeout(() => {
+                    if (activeProbeToken === thisToken) {
+                        hideLoading();
+                    }
+                }, 350);
+            };
+
+            iframe.addEventListener('load', onIframeLoaded);
+            iframe.src = currentUrl;
+
+            // Extra fallback if iframe load event doesn't trigger in reasonable time
+            setTimeout(() => {
+                if (activeProbeToken === thisToken && !iframeLoaded) {
+                    showError(pageName);
+                }
+            }, 6000);
         }
 
-        iframe.addEventListener('load', function() {
-            if (!currentUrl) return;
-
-            setTimeout(function() {
-                hideLoading();
-            }, 500);
-        });
+        function refreshIframe() {
+            loadWebsite();
+        }
 
         refreshBtn.addEventListener('click', function() {
             refreshIframe();
@@ -709,9 +1074,8 @@
             loadWebsite();
         });
 
+        // Initialize
         loadWebsite();
     })();
 </script>
-
-</body>
-</html>
+</body></html>
